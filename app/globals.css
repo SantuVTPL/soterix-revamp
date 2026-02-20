@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+:root {
+  --background: #03171f;
+  --background-secondary: #062334;
+  --background-input: #001316;
+  --card-background: #00171f;
+  --border: #5A5F60;
+  --border2: #313838;
+  --text-primary: #E2E3E3;
+  --text-secondary: #B4B7B8;
+  --btn-default: #17B2EB;
+  --btn-primary-text: #1F2F34;
+  --alert-danger: #FB462E;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-input: var(--background-input);
+  --color-card-background: var(--card-background);
+  --color-border: var(--border);
+  --color-border2: var(--border2);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-btn-default: var(--btn-default);
+  --color-btn-primary-text: var(--btn-primary-text);
+  --color-alert-danger: var(--alert-danger);
+}
+
+body {
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: "Inter", sans;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+/* Remove Chrome autofill white background */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px var(--background-input) inset !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
