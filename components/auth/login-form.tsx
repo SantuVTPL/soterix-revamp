@@ -15,7 +15,7 @@ function LoginForm() {
     const [ state, formAction, isPending ] = useActionState(login, undefined)
 
   return (
-    <Form action={formAction}>
+    <Form action={formAction} autoComplete='off'>
         <div className='flex flex-col gap-6'>
           <div>
             <h1 className='font-medium text-2xl text-center'>Login</h1>
@@ -29,7 +29,7 @@ function LoginForm() {
           <div className='flex flex-col gap-2'>
             <CPassword placeholder='Password' id='password' name='password' error={state?.errors?.password?.[0]} />
             <span>
-              <Link href='/auth/forgot-password' className='text-btn-default block text-start inline'>
+              <Link href='/auth/forgot-password' className='text-btn-default text-start inline'>
                 Forgot password?
               </Link>
             </span>

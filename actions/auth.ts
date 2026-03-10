@@ -70,16 +70,16 @@ export async function login(
         });
         
         parsedCookies.forEach((c) => {
+          console.log(c)
             cookieStore.set({
-                name: c.name,
-                value: c.value,
-                httpOnly: c.httpOnly || true,
-                path: c.path || '/',
-                secure: c.secure || false,
-                maxAge: c.maxAge || 3000,
-                // sameSite: c.sameSite || 'strict'
-            });
-            cookieStore.set('sameSite', 'strict')
+              name: c.name,
+              value: c.value,
+              httpOnly: true,
+              path: '/',
+              secure: false,
+              sameSite: 'strict',
+              maxAge: c.maxAge || 1800
+            })
         });
     }
     
@@ -88,4 +88,12 @@ export async function login(
   }
 
   redirect('/')
+}
+
+export async function signout() {
+  const cookieStore = await cookies()
+
+  cookieStore.delete('JSESSIONID')
+
+  redirect('/auth/login')
 }

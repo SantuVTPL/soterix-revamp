@@ -40,7 +40,7 @@ function ReCaptcha({ verified, setVerified }: Props) {
             <div className='flex items-center gap-2'>
                 {
                     loading ? (
-                        <CircularProgress size='sm' />
+                        <CircularProgress size='sm' variant='plain' />
                     ) : (
                         <CCheckbox size='md' disabled={verified} checked={verified} onChange={handleCheckboxClick} />
                     )
