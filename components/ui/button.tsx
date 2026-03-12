@@ -10,16 +10,29 @@ type Props = {
     text: string;
     type?: "button" | "submit" | "reset";
     inline?: boolean;
+    variant?: "solid" | "outlined";
+    fullWidth?: boolean;
 }
 
-function CButton({ onClick, disabled, loading, text, type = "button", inline }: Props) {
+function CButton({ onClick, disabled, loading, text, type = "button", inline, variant = "solid", fullWidth }: Props) {
   return (
     <Button 
         onClick={onClick}
         disabled={disabled}
         loading={loading}
         type={type}
-        className={`bg-btn-default! text-btn-primary-text! hover:bg-btn-default/80! rounded-full! h-10.25! font-medium! ${inline ? '' : 'w-full!'} ${disabled ? 'opacity-50 cursor-not-allowed!' : ''}`}
+        variant={variant}
+        sx={{
+            borderColor: "var(--btn-CTA)",
+            color: variant === "solid" ? "var(--btn-primary-text)" : "var(--border3)",
+            borderRadius: '30px',
+            backgroundColor: variant === "solid" ? "var(--btn-default)" : "transparent",
+            "&:hover": {
+                backgroundColor: variant === "solid" ? "var(--btn-default-a)" : 'var(--btn-CTA-A)',
+            },
+            width: fullWidth ? "100%" : 'auto',
+            height: '41px',
+        }}
     >
         {
             !loading && text

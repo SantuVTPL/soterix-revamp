@@ -3,7 +3,7 @@
 import { LoginFormSchema } from "@/definitions/auth";
 import { SHA512 } from "crypto-js";
 import { cookies } from "next/headers";
-import setCookieParser from 'set-cookie-parser'
+import setCookieParser from "set-cookie-parser";
 import { redirect } from "next/navigation";
 import { flattenError } from "zod";
 import { secureFetch } from "@/lib/secure-fetch";
@@ -22,10 +22,10 @@ export type FormState =
 
 export async function login(
   prevState: unknown,
-  data: FormData,
+  formData: FormData,
 ): Promise<FormState> {
-  const email = data.get("email") as string;
-  const password = data.get("password") as string;
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
 
   const ValidatedFormData = LoginFormSchema.safeParse({
     email,
@@ -42,58 +42,82 @@ export async function login(
     password: SHA512(ValidatedFormData.data.password).toString(),
   };
 
+  let res;
+
   try {
-    console.log(API.LOGIN)
-    const res = await secureFetch(
-      API.LOGIN,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-        skipCookies: true,
+    res = await secureFetch(API.LOGIN, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
-
-    if (!res.ok) {
-      const errorData = await res.json();
-      return { message: errorData.message || "Something went wrong." };
-    }
-
-    const setCookie = res.headers.get("set-cookie");
-    const cookieStore = await cookies();
-
-    if (setCookie) {
-        const parsedCookies = setCookieParser.parse(setCookie, {
-            map: false,
-        });
-        
-        parsedCookies.forEach((c) => {
-          console.log(c)
-            cookieStore.set({
-              name: c.name,
-              value: c.value,
-              httpOnly: true,
-              path: '/',
-              secure: false,
-              sameSite: 'strict',
-              maxAge: c.maxAge || 1800
-            })
-        });
-    }
-    
+      body: JSON.stringify(payload),
+      skipCookies: true,
+    });
   } catch (error) {
-    return { message: "Something went wrong." }
+    return { message: "Something went wrong." };
   }
 
-  redirect('/')
+  if (!res.ok) {
+    const errorData = await res.json();
+    return { message: errorData.message || "Something went wrong." };
+  }
+
+  const setCookie = res.headers.get("set-cookie");
+  const cookieStore = await cookies();
+
+  if (setCookie) {
+    const parsedCookies = setCookieParser.parse(setCookie, {
+      map: false,
+    });
+
+    const data = (await res.json()).result?.[0];
+    const mfa = data?.enterprises?.[0]?.multiFactorAuthentication;
+    const showAuthenticator = data?.showAuthenticator;
+
+    if (mfa && (!!mfa.email || !!mfa.sms || !!mfa.authenticatorApp)) {
+      cookieStore.set({
+        name: "MFA-JSESSIONID",
+        value: parsedCookies[0]?.value,
+        httpOnly: true,
+        path: "/",
+        secure: false,
+        sameSite: "lax",
+        maxAge: 300,
+      });
+
+      cookieStore.set({
+        name: "MFA",
+        value: JSON.stringify({ mfa, showAuthenticator }),
+        httpOnly: true,
+        path: "/",
+        secure: false,
+        sameSite: "lax",
+        maxAge: 300,
+      })
+
+      redirect("/auth/login/mfa");
+    }
+
+    parsedCookies.forEach((c) => {
+      cookieStore.set({
+        name: c.name,
+        value: c.value,
+        httpOnly: true,
+        path: "/",
+        secure: false,
+        sameSite: "strict",
+        maxAge: c.maxAge || 1800,
+      });
+    });
+  }
+
+  redirect("/");
 }
 
 export async function signout() {
-  const cookieStore = await cookies()
+  const cookieStore = await cookies();
 
-  cookieStore.delete('JSESSIONID')
+  cookieStore.delete("JSESSIONID");
 
-  redirect('/auth/login')
+  redirect("/auth/login");
 }

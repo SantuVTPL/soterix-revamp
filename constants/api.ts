@@ -4,6 +4,7 @@ const PREFIX = '/v-apiserver/REST'
 export const API = {
     // Auth
     LOGIN: `${API_BASE}${PREFIX}/central/user/login`,
+    AUTHQR: `${API_BASE}${PREFIX}/enterprise/user/mfa/register/authenticator`,
 
     // User
     USER: `${API_BASE}${PREFIX}/central/user/session/details`,

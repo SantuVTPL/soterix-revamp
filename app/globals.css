@@ -9,11 +9,16 @@
   --card-background: #00171f;
   --border: #5A5F60;
   --border2: #313838;
+  --border3: #0699CE;
   --text-primary: #E2E3E3;
   --text-secondary: #B4B7B8;
   --btn-default: #17B2EB;
+  --btn-default-a: #009fd9;
+  --btn-CTA: #0B4A62;
+  --btn-CTA-A: #0B4A6250;
   --btn-primary-text: #1F2F34;
   --alert-danger: #FB462E;
+  --alert-danger-a: #FB462E50;
   --gradient-primary: #4DBED8;
   --gradient-secondary: #326C92;
   --background-camera-pill: #12121299;
@@ -26,9 +31,11 @@
   --color-card-background: var(--card-background);
   --color-border: var(--border);
   --color-border2: var(--border2);
+  --color-border3: var(--border3);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-btn-default: var(--btn-default);
+  --color-btn-CTA: var(--btn-cta);
   --color-btn-primary-text: var(--btn-primary-text);
   --color-alert-danger: var(--alert-danger);
   --color-menubar: var(--background-menubar);

@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
   images: {
     qualities: [50, 75, 85, 100],
   },
+  reactCompiler: true,
 };
 
 export default nextConfig;
